@@ -1,4 +1,3 @@
-
 ## Data Scientist salaries
 
 A fun dataset showing data scientist salaries. Source: [Kaggle](https://www.kaggle.com/datasets/henryshan/2023-data-scientists-salary?resource=download).
@@ -6,6 +5,7 @@ A fun dataset showing data scientist salaries. Source: [Kaggle](https://www.kagg
 This exploratory notebook shows some analysis and attempts to make predictions for salaries.
 
 By Ali Shannon
+
 
 ```python
 import pandas as pd
@@ -26,15 +26,23 @@ from torch import nn, optim
 
 Reading the dataset and showing the columns
 
+
 ```python
 df = pd.read_csv("ds_salaries.csv")
 
 print(df.columns)
 ```
 
+    Index(['work_year', 'experience_level', 'employment_type', 'job_title',
+           'salary', 'salary_currency', 'salary_in_usd', 'employee_residence',
+           'remote_ratio', 'company_location', 'company_size'],
+          dtype='object')
+
+
 ### Preprocessing steps for plots
 
 Some data preprocessing is necessary for visualization and organization purposes. The information here is from the metadata on the Kaggle page.
+
 
 ```python
 full_names = {
@@ -62,6 +70,7 @@ for col_name, col_data in df.items():
 
 The following is an encoder, similar to one_hot_encoder but uses an array of numerical codes instead of sparse matrices to replace categorical data. This will come in handy later for machine learning applications.
 
+
 ```python
 def encode_df(df):
     encoded_df = df.copy()
@@ -72,7 +81,175 @@ def encode_df(df):
 encode_df(df=df.sample(9))
 ```
 
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>work_year</th>
+      <th>experience_level</th>
+      <th>employment_type</th>
+      <th>job_title</th>
+      <th>salary</th>
+      <th>salary_currency</th>
+      <th>salary_in_usd</th>
+      <th>employee_residence</th>
+      <th>remote_ratio</th>
+      <th>company_location</th>
+      <th>company_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3137</th>
+      <td>2022</td>
+      <td>3</td>
+      <td>2</td>
+      <td>69</td>
+      <td>131300</td>
+      <td>19</td>
+      <td>131300</td>
+      <td>75</td>
+      <td>100</td>
+      <td>70</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2629</th>
+      <td>2022</td>
+      <td>3</td>
+      <td>2</td>
+      <td>33</td>
+      <td>129300</td>
+      <td>19</td>
+      <td>129300</td>
+      <td>75</td>
+      <td>0</td>
+      <td>70</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1705</th>
+      <td>2022</td>
+      <td>0</td>
+      <td>3</td>
+      <td>25</td>
+      <td>24000</td>
+      <td>7</td>
+      <td>25216</td>
+      <td>26</td>
+      <td>100</td>
+      <td>70</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1512</th>
+      <td>2023</td>
+      <td>0</td>
+      <td>2</td>
+      <td>47</td>
+      <td>1060000</td>
+      <td>12</td>
+      <td>12888</td>
+      <td>39</td>
+      <td>50</td>
+      <td>38</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2378</th>
+      <td>2022</td>
+      <td>0</td>
+      <td>3</td>
+      <td>11</td>
+      <td>12000</td>
+      <td>19</td>
+      <td>12000</td>
+      <td>54</td>
+      <td>100</td>
+      <td>70</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>326</th>
+      <td>2023</td>
+      <td>2</td>
+      <td>2</td>
+      <td>69</td>
+      <td>150450</td>
+      <td>19</td>
+      <td>150450</td>
+      <td>75</td>
+      <td>100</td>
+      <td>70</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2849</th>
+      <td>2022</td>
+      <td>3</td>
+      <td>2</td>
+      <td>53</td>
+      <td>55000</td>
+      <td>7</td>
+      <td>57786</td>
+      <td>28</td>
+      <td>50</td>
+      <td>27</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1828</th>
+      <td>2022</td>
+      <td>3</td>
+      <td>2</td>
+      <td>42</td>
+      <td>122000</td>
+      <td>19</td>
+      <td>122000</td>
+      <td>75</td>
+      <td>0</td>
+      <td>70</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2759</th>
+      <td>2022</td>
+      <td>3</td>
+      <td>2</td>
+      <td>47</td>
+      <td>141525</td>
+      <td>19</td>
+      <td>141525</td>
+      <td>75</td>
+      <td>100</td>
+      <td>70</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
 The total salary distribution for the dataset
+
 
 ```python
 print(df['salary_in_usd'].describe())
@@ -80,7 +257,25 @@ sns.histplot(data=df, x="salary_in_usd", kde=True).set(title="Distributions of S
 plt.show()
 ```
 
+    count      3755.000000
+    mean     137570.389880
+    std       63055.625278
+    min        5132.000000
+    25%       95000.000000
+    50%      135000.000000
+    75%      175000.000000
+    max      450000.000000
+    Name: salary_in_usd, dtype: float64
+
+
+
+    
+![png](output_9_1.png)
+    
+
+
 US salaries vs all other countries
+
 
 ```python
 us_companies = df[df["company_location"] == "US"].loc[:, df.columns != 'company_location']
@@ -94,6 +289,13 @@ ax.set_title("Salary comparisons\nBlue: US    Orange: Non-US")
 plt.show()
 ```
 
+
+    
+![png](output_11_0.png)
+    
+
+
+
 ```python
 sns.boxplot(
     data=df,
@@ -104,6 +306,13 @@ sns.boxplot(
 ).set(title="Remote Ratio vs Salary in USD")
 plt.show()
 ```
+
+
+    
+![png](output_12_0.png)
+    
+
+
 
 ```python
 sns.boxplot(
@@ -117,6 +326,13 @@ sns.boxplot(
 plt.show()
 ```
 
+
+    
+![png](output_13_0.png)
+    
+
+
+
 ```python
 sns.boxplot(
     data=df,
@@ -128,6 +344,13 @@ sns.boxplot(
 plt.show()
 ```
 
+
+    
+![png](output_14_0.png)
+    
+
+
+
 ```python
 sns.boxplot(
     data=df,
@@ -138,6 +361,13 @@ sns.boxplot(
 ).set(title="Experience Level vs Salary in USD")
 plt.show()
 ```
+
+
+    
+![png](output_15_0.png)
+    
+
+
 
 ```python
 fig, ax = plt.subplots(figsize=(10, 35))
@@ -152,6 +382,13 @@ sns.boxplot(
 
 plt.show()
 ```
+
+
+    
+![png](output_16_0.png)
+    
+
+
 
 ```python
 fig, ax = plt.subplots(figsize=(10, 35))
@@ -179,9 +416,16 @@ ax.set_title("Salary comparisons\nBlue: US    Orange: Non-US")
 plt.show()
 ```
 
+
+    
+![png](output_17_0.png)
+    
+
+
 ### Machine learning for regression predictions
 
 This is to show how we use machine learning models to make forecasts given the data. Notice how `encode_df` function is being used here.
+
 
 ```python
 def make_data(df, remove_currency=False):
@@ -194,6 +438,7 @@ def make_data(df, remove_currency=False):
 ```
 
 Data split and forecast using linear regression. This uses a pseudo-matrix-inverse to solve the normal equation.
+
 
 ```python
 # US company analysis
@@ -212,7 +457,12 @@ print("R2 Score: ", r2_score(y_true=y_test, y_pred=y_pred))
 print("MAE Error: ", mean_absolute_error(y_true=y_test, y_pred=y_pred))
 ```
 
+    R2 Score:  0.0813531819013712
+    MAE Error:  42655.81614814446
+
+
 Random Forest is typically used by most data scientists
+
 
 ```python
 rfr = RandomForestRegressor(n_estimators=100, criterion="squared_error")
@@ -225,7 +475,12 @@ print("R2 Score: ", r2_score(y_true=y_test, y_pred=y_pred))
 print("MAE Error: ", mean_absolute_error(y_true=y_test, y_pred=y_pred))
 ```
 
+    R2 Score:  0.22373356343554018
+    MAE Error:  39250.50499426728
+
+
 Ridge Regressor (L2 regularization)
+
 
 ```python
 rr = Ridge()
@@ -238,7 +493,12 @@ print("R2 Score: ", r2_score(y_true=y_test, y_pred=y_pred))
 print("MAE Error: ", mean_absolute_error(y_true=y_test, y_pred=y_pred))
 ```
 
+    R2 Score:  0.081458124514029
+    MAE Error:  42651.43887445375
+
+
 Simple Neural Network. Here I am using two different scalers, neural networks require scaling to avoid divergence of parameters.
+
 
 ```python
 mlp = MLPRegressor(hidden_layer_sizes=(64, 128, 64), activation="relu", max_iter=300)
@@ -261,7 +521,12 @@ print("R2 Score: ", r2_score(y_true=y_test, y_pred=y_pred))
 print("MAE Error: ", mean_absolute_error(y_true=y_test, y_pred=y_pred))
 ```
 
+    R2 Score:  0.16747883830031307
+    MAE Error:  40741.16483425102
+
+
 This is a more complex neural network using PyTorch. The idea is to build a more sophisticated neural network.
+
 
 ```python
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -311,6 +576,23 @@ for epoch in range(1, n_epochs + 1):
 
 ```
 
+    /home/alish/envs/py311/lib/python3.11/site-packages/torch/nn/modules/loss.py:535: UserWarning: Using a target size (torch.Size([2036, 1])) that is different to the input size (torch.Size([1, 2036, 1])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+      return F.mse_loss(input, target, reduction=self.reduction)
+
+
+    Epoch 500	Train Loss: 5.56647e-01
+    Epoch 1000	Train Loss: 5.12382e-01
+    Epoch 1500	Train Loss: 5.11586e-01
+    Epoch 2000	Train Loss: 4.92084e-01
+    Epoch 2500	Train Loss: 4.99154e-01
+    Epoch 3000	Train Loss: 4.93208e-01
+    Epoch 3500	Train Loss: 4.85185e-01
+    Epoch 4000	Train Loss: 4.89115e-01
+    Epoch 4500	Train Loss: 4.91659e-01
+    Epoch 5000	Train Loss: 4.76664e-01
+
+
+
 ```python
 with torch.no_grad():
     y_pred_scaled = model(X_test_t).detach().cpu().squeeze(0).numpy()
@@ -320,6 +602,10 @@ y_pred = labels_scaler.inverse_transform(y_pred_scaled)
 print("R2 Score: ", r2_score(y_true=y_test, y_pred=y_pred))
 print("MAE Error: ", mean_absolute_error(y_true=y_test, y_pred=y_pred))
 ```
+
+    R2 Score:  0.09647992572332553
+    MAE Error:  41597.20352963147
+
 
 So far, the random forest regressor seems to have the lowest error and most prediction power. However, that is still quite low.
 
